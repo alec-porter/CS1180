@@ -18,20 +18,20 @@ public class lab03 {
         vipMember = userInput.nextLine().toLowerCase();   // store user input in lowercase
 
 
-        if (numDaysLate <= 5){
+        if (numDaysLate <= 5){  // check to see if book is 5 days or less late
             lateFee = 1;
         }
-        else if ((numDaysLate >= 6) && (numDaysLate <= 10)){
+        else if ((numDaysLate >= 6) && (numDaysLate <= 10)){  // check to see if book is between 6 and 10 days late
             lateFee = 5;
         }
-        else{
+        else{   // book is more than 10 days late
             lateFee = 10;
         }
 
-        if (vipMember.equals("yes")){
+        if (vipMember.equals("yes")){  // if individual is a vip member, apply 50% discount to late fee and print result
             System.out.printf("Late fine is $%.2f for %d days late.\n", (lateFee * 0.5), numDaysLate );
         }
-        else{
+        else{  // print late fee result for non vip
             System.out.printf("Late fine is $%.2f for %d days late.\n", lateFee, numDaysLate );
         }
         
