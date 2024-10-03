@@ -11,7 +11,7 @@ public class project2 {
 
         boolean tryAgain = true;
 
-        String anotherGame = "";
+        String anotherGame;
 
         while (tryAgain){
 
@@ -46,8 +46,8 @@ public class project2 {
             boolean continueGame = true;
             int count = 0;
             while(continueGame){
-                String gameValue = "";
-                String userValue = "";
+                String gameValue;
+                String userValue;
                 if (gameType.equals("easy")) { // easy game mode
                     gameValue = randomColors(count+1); // generate random color string based on count
                     System.out.println("Simon Says: " + gameValue); // print colors to screen
