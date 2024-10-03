@@ -10,14 +10,13 @@ public class project2 {
         Scanner userInput = new Scanner(System.in);
 
         boolean tryAgain = true;
-
         String anotherGame;
+        String gameType = "";
 
         while (tryAgain){
 
             // start menu to select game type
             boolean isValid = false; // initialize menu error check loop
-            String gameType = ""; // variable for the game type
             while (!isValid) {
                 System.out.print("Select Difficulty (easy or hard): ");
                 gameType = userInput.nextLine().toLowerCase();
