@@ -116,14 +116,14 @@ public class project2 {
 
     /* ---------- Methods ---------- */
 
+    /**
+    * Return a random string of numbers
+    * @param numberCount the number of numbers in the range 0-9 to return
+    * @return a string of random numbers
+    */
     public static String randomNumbers(int numberCount) {
         Random rand = new Random();
-        /**
-         * Return a random string of numbers
-         * 
-         * @param numberCount the number of numbers in the range 0-9 to return
-         * @return a string of random numbers
-         */
+
         String randomNumbers = "";
         int randValue;
         for (int i=0; i<numberCount; i++){
@@ -133,13 +133,13 @@ public class project2 {
         return randomNumbers;
     }
 
+    /**
+    * Return a random string of colors
+    * @param colorCount the number of colors to return
+    * @return a string of random colors
+    */
     public static String randomColors(int colorCount) {
-        /**
-         * Return a random string of colors
-         * 
-         * @param colorCount the number of colors to return
-         * @return a string of random colors
-         */
+
         Random rand = new Random();
         String randomColors = "";
         int randValue;  // initialize random number
@@ -163,18 +163,20 @@ public class project2 {
         return randomColors;
     }
 
+    /**
+    * Clears the screen
+    */
     public static void clearScreen() {
-        /**
-         * Clears the screen
-         */
+
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
 
+    /**
+    * Pause program for 3 seconds
+    */
     public static void pauseGame() {
-        /**
-         * Pause program for 3 seconds
-         */
+
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
