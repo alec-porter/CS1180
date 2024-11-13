@@ -8,7 +8,6 @@ public class project3 {
 
         ArrayList<String> gameWords = sevenUniqueLetterWord();  // use method to create unique 7 letter word arraylist for the game
         int totalWords = gameWords.size(); // determine how many words are in the game word list
-        Scanner userInput = new Scanner(System.in);
         
         // select a random word from the word list
         Random rand = new Random();
@@ -16,6 +15,7 @@ public class project3 {
         String wordForGame = gameWords.get(randWord);
 
         // initialiaze variables
+        Scanner userInput = new Scanner(System.in);
         boolean continueGame = true;
         String gameInput;
         boolean validUserInput = false;
@@ -49,9 +49,9 @@ public class project3 {
                     break;
 
                 default: // check user input and score based on valid word and length
-                    validUserInput = validStringInput(gameInput, wordForGame); // check if the user input is valid
+                    validUserInput = validStringInput(gameInput, wordForGame); // method: check if the user input is valid
                     if (validUserInput){
-                        validUserWord = validWord(gameInput); // check if the user input is a word in the word list
+                        validUserWord = validWord(gameInput); // method: check if the user input is a word in the word list
                     }
                     else{ // if user inputs letters not in the game word output message to user
                         System.out.println("You entered letters not in the scambled word.");
@@ -84,6 +84,7 @@ public class project3 {
                     
             }
         }
+        userInput.close();
     }
 
 
@@ -129,6 +130,7 @@ public static boolean validWord(String input) throws Exception{
             value = true;
         }
     }
+    inputFile.close();
     return value;
 }
 
@@ -139,9 +141,9 @@ public static boolean validWord(String input) throws Exception{
 public static void displayWord(String input){
 
     ArrayList<Character> mixedChar = new ArrayList<>(); // create character arraylist
-    char[] stringChars = input.toCharArray(); // convert stirng input to characters
+    char[] stringChars = input.toCharArray(); // convert string input to characters
     for (char character : stringChars){
-        mixedChar.add(character);  // add string characters to arraylist
+       mixedChar.add(character);  // add string characters to arraylist
     }
     Collections.shuffle(mixedChar); // shuffle arraylist
     System.out.println(mixedChar.get(0) + "     " + mixedChar.get(1) + "     " + mixedChar.get(2) + "     " + mixedChar.get(3) + 
@@ -172,7 +174,7 @@ public static ArrayList sevenUniqueLetterWord() throws Exception{
 
             boolean repeatChar = false;
             for (int i = 0; i < stringChars.length - 1; i++){
-                if(stringChars[i] == stringChars[i+1]){ // check for non repeaing characters
+                if(stringChars[i] == stringChars[i+1]){ // check for repeating characters
                     repeatChar = true;
                 }
             }
