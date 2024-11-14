@@ -1,36 +1,71 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 
 public class project4 {
-    @SuppressWarnings({ "ConvertToTryWithResources", "unchecked" })
     public static void main(String[] args) throws Exception {
-        
-        // DEBUG initialize variables
-        String heroName = "Richter Belmont";
-        int heroHealth = 88;
-        int catacombSize = 5;
-
 
         // initialize variables
         Scanner userInput = new Scanner(System.in);
+        Hero hero = new Hero();
+        Catacombs dungeon = new Catacombs();
         int[] playerLocation = new int[2];
-        int numMonsters;
-        @SuppressWarnings("unused")
+        int numMonsters = 0;
+        int catacombSize = 0;
         ArrayList<int[]> monsterLocations = new ArrayList<>();
-        char[][] catacomb = new char[catacombSize+2][catacombSize+2];
         playerLocation[0] = 1;
         playerLocation[1] = 1;
 
+        // set up game
+        clearScreen();
+        System.out.print("What is your name, heroic adventurer? ");
+        String heroName = userInput.nextLine();
+        hero.setName(heroName);
+        boolean validInput = false;
+        while (!validInput){
+            System.out.print("How large of a catacomb do you want to face? (enter a number from 5 to 10) ");
+            if (userInput.hasNextInt()){
+                catacombSize = userInput.nextInt();
+                userInput.nextLine();
+                if(catacombSize >= 5 && catacombSize <= 10){
+                    validInput = true;
+                }
+                else{
+                    System.out.println("That is not a valid catacomb size.");
+                }
+            }
+            else{
+                System.out.println("That is not a valid catacomb size.");
+                userInput.next();
+            }
+            
+        }
+        System.out.printf("You are represented by the %c symbol on the map.\n", '\u2656');
+        System.out.printf("Navigate through the catacomb by typing \"north\", \"east\", \"south\" or \"west\" when prompted.\n");
+        System.out.printf("The catacombs slowly deplete your health so the more moves you take, the weaker you become.\n");
+        System.out.printf("You can smell monsters if they are in adjacent rooms.\n");
+        System.out.printf("If you enter a room with monsters you will automatically fight them.  If you survive you will be able to move on.\n");
+        System.out.printf("Navigate to the X on the map to claim the treasure and exit the catacombs.\n\n");
+        System.out.printf("Type any character to start.\n");
+        //userInput.nextLine();
+        
+
         // spawn monsters in catacombs
-        catacombs dungeon = new catacombs();
         dungeon.setCatacombs(catacombSize);
         monsterLocations = dungeon.getMonsterLocations();
         numMonsters = dungeon.getNumberOfMonsters();
         catacombSize = dungeon.getCatacombSize();
+        char[][] catacomb = new char[catacombSize+2][catacombSize+2];
+
+
         
 
         // DEBUG
+        // Monster monster = new Monster(monsterLocations.get(0), 5);
+        // System.out.println(monster.getName());
+        // System.out.println(Arrays.toString(monster.getLocation()));
+
         //int[] monster1Location = monsterLocations.get(0);
         //int monster1LocationRow = monster1Location[0];
         //System.out.println(monster1LocationRow);
@@ -38,31 +73,23 @@ public class project4 {
         //System.out.println(Arrays.toString(monsterLocations.get(3)));
         //System.out.println(Arrays.deepToString(catacomb));
 
+        userInput.nextLine();
         boolean continueGame = true;
         while(continueGame){
             clearScreen();
             catacomb = buildCatacomb(catacombSize, playerLocation);
-            drawCatacomb(catacomb, heroName, heroHealth, numMonsters);
-            playerLocation = movePlayer(playerLocation, catacombSize, userInput);
+            drawCatacomb(catacomb, hero.getHealth(), numMonsters, hero);
+            playerLocation = movePlayer(playerLocation, catacombSize, userInput, hero);
             if ( playerLocation[0] == catacombSize && playerLocation[1] == catacombSize){
                 clearScreen();
                 catacomb = buildCatacomb(catacombSize, playerLocation);
-                drawCatacomb(catacomb, heroName, heroHealth, numMonsters);
+                drawCatacomb(catacomb, hero.getHealth(), numMonsters, hero);
                 continueGame = false;
             }
-            System.out.println("Congratulations You Escaped the Catacomb!");
+            System.out.println("Congratulations, You Escaped the Catacomb!");
 
         }
 
-
-        // for (int i = 0; i < 5; i++){
-        //     playerLocation = movePlayer(playerLocation, catacombSize, userInput);
-        //     clearScreen();
-        //     catacomb = buildCatacomb(catacombSize, playerLocation);
-        //     drawCatacomb(catacomb, heroName, heroHealth, numMonsters);
-        // }
-
-        
         userInput.close();
     }
 
@@ -115,7 +142,7 @@ public static char[][] buildCatacomb(int catacombSize, int[] playerLocation){
 }
 
 
-public static void drawCatacomb(char[][] catacomb, String heroName, int heroHealth, int numMonsters){
+public static void drawCatacomb(char[][] catacomb, int heroHealth, int numMonsters, Hero hero){
 
     // print catacomb to screen
     for (int i = 0; i < catacomb.length; i++){
@@ -124,12 +151,12 @@ public static void drawCatacomb(char[][] catacomb, String heroName, int heroHeal
         }
         System.out.println();
     }
-    System.out.printf("%s's Health: %s\n", heroName, heroHealth);
+    System.out.printf("%s's Health: %s\n", hero.getName(), hero.getHealth());
     System.out.printf("You smell %d monsters nearby.\n", numMonsters);
 }
 
 
-public static int[] movePlayer(int[] playerLocation, int catacombSize, Scanner userInput){
+public static int[] movePlayer(int[] playerLocation, int catacombSize, Scanner userInput, Hero hero){
     // initialize variables
     int[] movePlayer = new int[2];
     int playerRow = playerLocation[0];
@@ -143,6 +170,7 @@ public static int[] movePlayer(int[] playerLocation, int catacombSize, Scanner u
             moveDirection = userInput.nextLine().toLowerCase();
             if (moveDirection.equals("east") || moveDirection.equals("south")){
                 movePlayer = newPlayerLocation(moveDirection, playerLocation);
+                hero.movementDamage();
                 validInput = true;
             }
             else{
@@ -156,6 +184,7 @@ public static int[] movePlayer(int[] playerLocation, int catacombSize, Scanner u
             moveDirection = userInput.nextLine().toLowerCase();
             if (moveDirection.equals("west") || moveDirection.equals("south")){
                 movePlayer = newPlayerLocation(moveDirection, playerLocation);
+                hero.movementDamage();
                 validInput = true;
             }
             else{
@@ -169,6 +198,7 @@ public static int[] movePlayer(int[] playerLocation, int catacombSize, Scanner u
             moveDirection = userInput.nextLine().toLowerCase();
             if (moveDirection.equals("east") || moveDirection.equals("south") || moveDirection.equals("west")){
                 movePlayer = newPlayerLocation(moveDirection, playerLocation);
+                hero.movementDamage();
                 validInput = true;
             }
             else{
@@ -182,6 +212,7 @@ public static int[] movePlayer(int[] playerLocation, int catacombSize, Scanner u
             moveDirection = userInput.nextLine().toLowerCase();
             if (moveDirection.equals("east") || moveDirection.equals("north") || moveDirection.equals("west")){
                 movePlayer = newPlayerLocation(moveDirection, playerLocation);
+                hero.movementDamage();
                 validInput = true;
             }
             else{
@@ -195,6 +226,7 @@ public static int[] movePlayer(int[] playerLocation, int catacombSize, Scanner u
             moveDirection = userInput.nextLine().toLowerCase();
             if (moveDirection.equals("east") || moveDirection.equals("north")){
                 movePlayer = newPlayerLocation(moveDirection, playerLocation);
+                hero.movementDamage();
                 validInput = true;
             }
             else{
@@ -208,6 +240,7 @@ public static int[] movePlayer(int[] playerLocation, int catacombSize, Scanner u
             moveDirection = userInput.nextLine().toLowerCase();
             if (moveDirection.equals("east") || moveDirection.equals("south") || moveDirection.equals("north")){
                 movePlayer = newPlayerLocation(moveDirection, playerLocation);
+                hero.movementDamage();
                 validInput = true;
             }
             else{
@@ -221,6 +254,7 @@ public static int[] movePlayer(int[] playerLocation, int catacombSize, Scanner u
             moveDirection = userInput.nextLine().toLowerCase();
             if (moveDirection.equals("west") || moveDirection.equals("south") || moveDirection.equals("north")){
                 movePlayer = newPlayerLocation(moveDirection, playerLocation);
+                hero.movementDamage();
                 validInput = true;
             }
             else{
@@ -237,6 +271,7 @@ public static int[] movePlayer(int[] playerLocation, int catacombSize, Scanner u
             moveDirection = userInput.nextLine().toLowerCase();
             if (moveDirection.equals("east") || moveDirection.equals("south") || moveDirection.equals("north") || moveDirection.equals("west")){
                 movePlayer = newPlayerLocation(moveDirection, playerLocation);
+                hero.movementDamage();
                 validInput = true;
             }
             else{

@@ -2,12 +2,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-public class catacombs {
+public class Catacombs {
     private int catacombSize = 5;
     private int numberOfMonsters = 4;
     private ArrayList<int[]> monsterLocations = new ArrayList<>();
 
-    public catacombs(){
+    public Catacombs(){
         catacombSize = 5;
         numberOfMonsters = 4;
         Random rand = new Random();
