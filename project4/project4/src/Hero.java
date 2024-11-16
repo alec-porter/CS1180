@@ -5,7 +5,7 @@ public class Hero {
     private String name = "Hero";
     private int health = 100;
     private int damage = 0;
-    private int [] position = new int [2];
+    //private int [] position = new int [2];
     private boolean isDefeated = false;
 
     public void takeDamage(int input){

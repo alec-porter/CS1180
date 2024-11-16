@@ -43,7 +43,7 @@ public class project4 {
             }
             
         }
-        System.out.printf("You are represented by the %c symbol on the map.\n", '\u2656');
+        System.out.printf("\nYou are represented by the %c symbol on the map.\n", '\u2656');
         System.out.printf("Navigate through the catacomb by typing \"north\", \"east\", \"south\" or \"west\" when prompted.\n");
         System.out.printf("The catacombs slowly deplete your health so the more moves you take, the weaker you become.\n");
         System.out.printf("You can smell monsters if they are in adjacent rooms.\n");
@@ -69,6 +69,7 @@ public class project4 {
             playerLocation = movePlayer(playerLocation, catacombSize, userInput, hero);
 
             if (hero.getIsDefeated()){ // verify player health is positive while moving through catacombs
+                clearScreen();
                 System.out.println("You did not escape the catacombs in time!");
                 continueGame = false;
             }
@@ -79,9 +80,11 @@ public class project4 {
                 clearScreen();
                 System.out.println("There are " + battle + " monsters to fight in this room.");
                 System.out.println("Preparter to fight");
-                pauseGame(1000);
+                pauseGame(2000);
                 for (int i = 1; i <= battle; i++){  // fight each monster in the room
-                    System.out.println("Fighting Monster.");
+                    int monsterNumber = dungeon.getMonstersDefeated()+1;
+                    clearScreen();
+                    System.out.println("Fighting Monster " + monsterNumber);
                     Monster monster = new Monster();
                     while (!hero.getIsDefeated() && !monster.getIsDefeated()){
                         System.out.printf("%s's Health: %d  |  Monster's Health: %d\n", hero.getName(), hero.getHealth(), monster.getHealth());
@@ -93,30 +96,32 @@ public class project4 {
                         hero.takeDamage(monsterAttack);
                     }
                     if (!hero.getIsDefeated()){
-                        System.out.println("You defeated the Monster!");
-                        System.out.println("Press any character to continue: ");
+                        System.out.println("You defeated Monster " + monsterNumber + " and have " + hero.getHealth() + " health remaining.");
+                        dungeon.updateMonstersDefeated();
 
-                        for (int j = 0; j < battle; j++){  // remove each defeated monster
-                            System.out.println(Arrays.deepToString(monsterLocations.toArray())); // DEBUG print monster locations                   
-                            for (int k = 0; k < monsterLocations.size(); k++ ){
-                                if (Arrays.equals(monsterLocations.get(k) , playerLocation)){
-                                    index = k;                                
-                                }
+                        // remove monster
+                        int count = 0;
+                        for (int[] j : monsterLocations){  // find index of current location in monster location array and store index
+                            if (Arrays.equals(playerLocation, j)){
+                                index = count;
+                                //System.out.println("Index: " + index);  // DEBUG print index of monster 
                             }
-                            dungeon.updateMonsterLocations(index);  // remove defeated monster
-                            monsterLocations = dungeon.getMonsterLocations();  // load updated monster locations
-                            System.out.println(Arrays.deepToString(monsterLocations.toArray())); //DEBUG check if monsters were removed from array
-                        }               
-                    userInput.nextLine();
+                            count+=1;
+                        }
+                        dungeon.updateMonsterLocations(index);
+                        //System.out.println("Monster Locations: " + Arrays.deepToString(monsterLocations.toArray())); // DEBUG print monster locations
+
+                        System.out.println("Press any character to continue: ");
+                        userInput.nextLine();
                     }
                     else{
+                        clearScreen();
                         System.out.println("You were defeated!");
                         continueGame = false;
                     }
                 }
             }
-            if ( playerLocation[0] == catacombSize && playerLocation[1] == catacombSize){
-                clearScreen();
+            if ( playerLocation[0] == catacombSize && playerLocation[1] == catacombSize){  // end game if player reaches lower right corner of catacombs
                 catacomb = buildCatacomb(catacombSize, playerLocation);
                 drawCatacomb(catacomb, hero.getHealth(), numMonsters, hero, dungeon, playerLocation);
                 continueGame = false;
@@ -124,6 +129,7 @@ public class project4 {
         }
 
         if (!hero.getIsDefeated()){
+            clearScreen();
             System.out.println("Congratulations, you escaped the catacombs and claimed the treasure!");
         }
 
@@ -177,7 +183,6 @@ public static int nearbyMosters(int[] playerLocation, Catacombs dungeon){
 public static char[][] buildCatacomb(int catacombSize, int[] playerLocation){
 
     char[][] catacomb = new char[catacombSize+2][catacombSize+2];  // set catacomb size based on user input
-
     char border = '\u2588';
     char emptyRoom = '\u0020';
     char player = '\u2656';
@@ -235,7 +240,7 @@ public static void drawCatacomb(char[][] catacomb, int heroHealth, int numMonste
     numMonsters = nearbyMosters(playerLocation, dungeon);
     System.out.printf("%s's Health: %s and Location: %s\n", hero.getName(), hero.getHealth(), Arrays.toString(playerLocation));
     System.out.printf("You smell %d monsters nearby.\n", numMonsters);
-    System.out.println("Moster Locations: " + Arrays.deepToString(monsterLocations.toArray())); // DEBUG display monster locations
+    //System.out.println("Moster Locations: " + Arrays.deepToString(monsterLocations.toArray())); // DEBUG display monster locations
 }
 
 
@@ -405,5 +410,6 @@ public static void pauseGame(int time) {
         Thread.currentThread().interrupt();
     }
 }
+
 
 }
