@@ -1,9 +1,10 @@
-import java.io.*;
-import java.lang.reflect.Array;
+//import java.io.*;
+//import java.lang.reflect.Array;
 import java.util.*;
 
 
 public class project4 {
+    @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
 
         // initialize variables
@@ -223,7 +224,6 @@ public static void drawCatacomb(char[][] catacomb, int heroHealth, int numMonste
 
     ArrayList<int[]> monsterLocations = new ArrayList<>();
     monsterLocations = dungeon.getMonsterLocations();
-    boolean battle = false;
 
     // print catacomb to screen
     for (int i = 0; i < catacomb.length; i++){
@@ -245,7 +245,7 @@ public static int[] movePlayer(int[] playerLocation, int catacombSize, Scanner u
     int playerRow = playerLocation[0];
     int playerColumn = playerLocation[1];
     boolean validInput = false;
-    String moveDirection = "";
+    String moveDirection;
 
     if (playerRow == 1 && playerColumn == 1){  // movement options for player located in top left corner
         while (!validInput){
@@ -345,9 +345,6 @@ public static int[] movePlayer(int[] playerLocation, int catacombSize, Scanner u
             }
         }
     }
-    //else if (playerRow == catacombSize && playerRow == catacombSize){  // player located at the exit
-    //    System.out.println("Exit");
-    //}
     else {  // player located in the middle of the catacombs
         while (!validInput){
             System.out.print("Move North, East, South or West: ");
@@ -370,30 +367,36 @@ public static int[] movePlayer(int[] playerLocation, int catacombSize, Scanner u
 public static int[] newPlayerLocation(String direction, int[] currentPlayerLocation){
     int[] newPlayerLocation = new int[2];
     switch (direction){
-        case "north":  // move player location one row up
+        case "north" -> {
+            // move player location one row up
             newPlayerLocation[0] = currentPlayerLocation[0] - 1;
             newPlayerLocation[1] = currentPlayerLocation[1];
-            break;
-        case "south":  // move player location one row down
+            }
+        case "south" -> {
+            // move player location one row down
             newPlayerLocation[0] = currentPlayerLocation[0] + 1;
             newPlayerLocation[1] = currentPlayerLocation[1];
-            break;
-        case "east":  // move player location one column righ
+            }
+        case "east" -> {
+            // move player location one column righ
             newPlayerLocation[0] = currentPlayerLocation[0];
             newPlayerLocation[1] = currentPlayerLocation[1] + 1;
-            break;
-        case "west":  // move player location one column left
+            }
+        case "west" -> {
+            // move player location one column left
             newPlayerLocation[0] = currentPlayerLocation[0];
             newPlayerLocation[1] = currentPlayerLocation[1] - 1;
-            break;
+            }
     }
     return newPlayerLocation;
 }
+
 
 public static void clearScreen(){
     System.out.print("\033[H\033[2J");
     System.out.flush();
 }
+
 
 public static void pauseGame(int time) {
     try {
