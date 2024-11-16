@@ -4,37 +4,20 @@ public class Monster {
 
     private String name = "Monster";
     private int health = 25;
-    private int [] position = new int [2];
     private int damage = 0;
     private boolean isDefeated = false;
-    private int monsterNumber = 1;
-
-    public Monster(int[] location, int monsterNumber){
-        setName(monsterNumber);
-        setLocation(location);
+    
+    public void takeDamage(int input){
+        health = health - input;
+        if (health <= 0 ){
+            isDefeated = true;
         }
+    }
 
-    public int attackDamage(){
+    public int dealDamage(){
         Random rand = new Random();
-        damage = rand.nextInt(4) + 1;
+        damage = rand.nextInt(5)+1;
         return damage;
-    }
-
-    public void takeDamage(){
-        Random rand = new Random();
-        health = health - rand.nextInt(9) + 1;
-    }
-
-    public void setLocation(int[] input){
-        position = input;
-    }
-
-    public void setName(int input){
-        name = "Monster " + input;
-    }
-
-    public int[] getLocation(){
-        return position;
     }
 
     public String getName(){
@@ -43,6 +26,10 @@ public class Monster {
 
     public int getHealth(){
         return health;
+    }
+
+    public boolean getIsDefeated(){
+        return isDefeated;
     }
 
 }

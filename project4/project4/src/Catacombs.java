@@ -64,4 +64,8 @@ public class Catacombs {
     public int getCatacombSize(){
         return catacombSize;
     }
+
+    public void updateMonsterLocations(int input){
+        monsterLocations.remove(input);
+    }
 }
