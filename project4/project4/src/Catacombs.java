@@ -6,6 +6,7 @@ public class Catacombs {
     private int catacombSize = 5;
     private int numberOfMonsters = 4;
     private ArrayList<int[]> monsterLocations = new ArrayList<>();
+    private ArrayList<int[]> deadMonsters = new ArrayList<>();
     private int monstersDefeated = 0;
 
     public Catacombs(){
@@ -76,6 +77,14 @@ public class Catacombs {
 
     public void updateMonstersDefeated(){
         monstersDefeated+=1;
+    }
+
+    public void updateDeadMonsters(int[] input){
+        deadMonsters.add(input);
+    }
+
+    public ArrayList getDeadMonsters(){
+        return deadMonsters;
     }
 
 }

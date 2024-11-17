@@ -64,7 +64,7 @@ public class project4 {
         boolean continueGame = true;
         while(continueGame){
             clearScreen();
-            catacomb = buildCatacomb(catacombSize, playerLocation);
+            catacomb = buildCatacomb(catacombSize, playerLocation, dungeon);
             drawCatacomb(catacomb, hero.getHealth(), numMonsters, hero, dungeon, playerLocation);
             playerLocation = movePlayer(playerLocation, catacombSize, userInput, hero);
 
@@ -87,11 +87,11 @@ public class project4 {
                     System.out.println("Fighting Monster " + monsterNumber);
                     Monster monster = new Monster();
                     while (!hero.getIsDefeated() && !monster.getIsDefeated()){
-                        System.out.printf("%s's Health: %d  |  Monster's Health: %d\n", hero.getName(), hero.getHealth(), monster.getHealth());
+                        System.out.printf("%s's Health: %d  |  Monster %s's Health: %d\n", hero.getName(), hero.getHealth(), monsterNumber, monster.getHealth());
                         int heroAttack = hero.dealDamage();
                         System.out.printf("%s attacks and deals %d damage.\n", hero.getName(), heroAttack);
                         int monsterAttack = monster.dealDamage();
-                        System.out.printf("Monster attacks and deals %d damage.\n", monsterAttack);
+                        System.out.printf("Monster %s attacks and deals %d damage.\n", monsterNumber, monsterAttack);
                         monster.takeDamage(heroAttack);
                         hero.takeDamage(monsterAttack);
                     }
@@ -109,6 +109,7 @@ public class project4 {
                             count+=1;
                         }
                         dungeon.updateMonsterLocations(index);
+                        dungeon.updateDeadMonsters(playerLocation);
                         //System.out.println("Monster Locations: " + Arrays.deepToString(monsterLocations.toArray())); // DEBUG print monster locations
 
                         System.out.println("Press any character to continue: ");
@@ -122,7 +123,7 @@ public class project4 {
                 }
             }
             if ( playerLocation[0] == catacombSize && playerLocation[1] == catacombSize){  // end game if player reaches lower right corner of catacombs
-                catacomb = buildCatacomb(catacombSize, playerLocation);
+                catacomb = buildCatacomb(catacombSize, playerLocation, dungeon);
                 drawCatacomb(catacomb, hero.getHealth(), numMonsters, hero, dungeon, playerLocation);
                 continueGame = false;
             }
@@ -180,13 +181,15 @@ public static int nearbyMosters(int[] playerLocation, Catacombs dungeon){
 }
 
 
-public static char[][] buildCatacomb(int catacombSize, int[] playerLocation){
+public static char[][] buildCatacomb(int catacombSize, int[] playerLocation, Catacombs dungeon){
 
     char[][] catacomb = new char[catacombSize+2][catacombSize+2];  // set catacomb size based on user input
     char border = '\u2588';
     char emptyRoom = '\u0020';
     char player = '\u2656';
     char exit = '\u2716';
+    char deadMonster = '\u2620';
+    ArrayList<int[]> deadMonsters = new ArrayList<>();
 
     // draw catacomb border
     for (int i = 0; i < catacombSize+2; i++){
@@ -213,6 +216,14 @@ public static char[][] buildCatacomb(int catacombSize, int[] playerLocation){
         }
     }
 
+    // draw dead monsters
+    deadMonsters = dungeon.getDeadMonsters();
+    for (int[] location : deadMonsters){
+        int monsterRow = location[0];
+        int monsterCol = location[1];
+        catacomb[monsterRow][monsterCol] = deadMonster;
+    }
+
     // draw player
     int playerRow = playerLocation[0];
     int playerColumn = playerLocation[1];
@@ -222,6 +233,7 @@ public static char[][] buildCatacomb(int catacombSize, int[] playerLocation){
     catacomb[catacombSize][catacombSize] = exit;    
 
     return catacomb;
+    
 }
 
 
