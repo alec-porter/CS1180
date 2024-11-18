@@ -37,7 +37,7 @@ Extract the contents of project4.zip.  Run Project4.java located in the src fold
 <li>Once monsters are defeated they de-spawn from the room.  Rooms that have been vanquished of any monsters by the Hero are indicated by the &#x2620; symbol on the map.</li>
 <li>If the Hero makes it to the exit they claim the treasure.
 </ul>
-Good luck and enjoy **Catacomb Crawler**.
+Good luck and enjoy <b>Catacomb Crawler</b>.
 
 ## Lessons Learned
 <ul>
