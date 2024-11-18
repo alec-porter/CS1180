@@ -3,9 +3,11 @@
 import java.util.*;
 
 
-public class project4 {
-    @SuppressWarnings("unchecked")
+public class Project4 {
     public static void main(String[] args) throws Exception {
+
+        // additional feature: implements a character map that displays the dungeon, player location, and defeated monsters to the command line
+        // additional feature: for each monster defeated the player's potential max damage inflicted on monsters increased by one (i.e. they player attack levels up)
 
         // initialize variables
         Scanner userInput = new Scanner(System.in);
@@ -50,7 +52,7 @@ public class project4 {
         System.out.printf("You can smell monsters if they are in adjacent rooms.\n");
         System.out.printf("If you enter a room with monsters you will automatically fight them.  If you survive you will be able to move on.\n");
         System.out.printf("Rooms where you have defeated a monster will be marked with the %c symbol on the map.\n", '\u2620');
-        System.out.printf("For every monster you defeat you gain an addition attack point.\n");
+        System.out.printf("For every monster you defeat your potential max damage increases by one.\n");
         System.out.printf("Navigate to the X on the map to claim the treasure and exit the catacombs.\n\n");
         System.out.printf("Type any character to start.\n");
         
@@ -153,11 +155,10 @@ public class project4 {
  * @param playerLocation player location in catacombs
  * @param dungeon object instance of Catacombs class created
  * @return number of monsters in the same room as the player
- */
+ */ 
 public static int monstersToFight(int[] playerLocation, Catacombs dungeon){
     int numMonstersToFight = 0;
-    ArrayList<int[]> monsterLocations = new ArrayList<>();
-    monsterLocations = dungeon.getMonsterLocations();  // get monsterlocations array
+    ArrayList<int[]> monsterLocations = dungeon.getMonsterLocations(); 
     for (int[] i : monsterLocations){  // loop through monsterlocations array and check if player location and monster location are equal
         if (Arrays.equals(playerLocation, i)){
             numMonstersToFight+=1;
@@ -174,8 +175,7 @@ public static int monstersToFight(int[] playerLocation, Catacombs dungeon){
  */
 public static int nearbyMosters(int[] playerLocation, Catacombs dungeon){
     int totalMonsters = 0;
-    ArrayList<int[]> monsterLocations = new ArrayList<>();
-    monsterLocations = dungeon.getMonsterLocations();
+    ArrayList<int[]> monsterLocations = dungeon.getMonsterLocations();
 
     // create locations where player can detect monsters and check against monster locations from catacombs
     int[] potentialMonsterLocationN = {playerLocation[0]-1, playerLocation[1]};  
@@ -273,8 +273,7 @@ public static char[][] buildCatacomb(int catacombSize, int[] playerLocation, Cat
  */
 public static void drawCatacomb(char[][] catacomb, int heroHealth, int numMonsters, Hero hero, Catacombs dungeon, int[] playerLocation){
 
-    ArrayList<int[]> monsterLocations = new ArrayList<>();
-    monsterLocations = dungeon.getMonsterLocations();
+    ArrayList<int[]> monsterLocations = dungeon.getMonsterLocations();
 
     // print catacomb to screen
     for (int i = 0; i < catacomb.length; i++){
