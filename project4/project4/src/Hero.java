@@ -5,8 +5,8 @@ public class Hero {
     private String name = "Hero";
     private int health = 100;
     private int damage = 0;
-    //private int [] position = new int [2];
     private boolean isDefeated = false;
+    private int levelUp = 1;
 
     public void takeDamage(int input){
         health = health - input;
@@ -17,7 +17,7 @@ public class Hero {
 
     public int dealDamage(){
         Random rand = new Random();
-        damage = rand.nextInt(9)+1;
+        damage = rand.nextInt(9)+levelUp;
         return damage;
     }
 
@@ -42,6 +42,10 @@ public class Hero {
 
     public String getName(){
         return name;
+    }
+
+    public void setLevelUp(){
+        levelUp += 1;
     }
 
 

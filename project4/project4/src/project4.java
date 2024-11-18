@@ -25,7 +25,7 @@ public class project4 {
         String heroName = userInput.nextLine();
         hero.setName(heroName);
         boolean validInput = false;
-        while (!validInput){
+        while (!validInput){  // ensure player enters an integer and valid catacomb size
             System.out.print("How large of a catacomb do you want to face? (enter a number from 5 to 10) ");
             if (userInput.hasNextInt()){
                 catacombSize = userInput.nextInt();
@@ -41,18 +41,21 @@ public class project4 {
                 System.out.println("That is not a valid catacomb size.");
                 userInput.next();
             }
-            
         }
+
+        // print instructions for the player
         System.out.printf("\nYou are represented by the %c symbol on the map.\n", '\u2656');
         System.out.printf("Navigate through the catacomb by typing \"north\", \"east\", \"south\" or \"west\" when prompted.\n");
         System.out.printf("The catacombs slowly deplete your health so the more moves you take, the weaker you become.\n");
         System.out.printf("You can smell monsters if they are in adjacent rooms.\n");
         System.out.printf("If you enter a room with monsters you will automatically fight them.  If you survive you will be able to move on.\n");
+        System.out.printf("Rooms where you have defeated a monster will be marked with the %c symbol on the map.\n", '\u2620');
+        System.out.printf("For every monster you defeat you gain an addition attack point.\n");
         System.out.printf("Navigate to the X on the map to claim the treasure and exit the catacombs.\n\n");
         System.out.printf("Type any character to start.\n");
         
 
-        // spawn monsters in catacombs
+        // build catacomb and spawn monsters
         dungeon.setCatacombs(catacombSize);
         monsterLocations = dungeon.getMonsterLocations();
         numMonsters = dungeon.getNumberOfMonsters();
@@ -64,11 +67,13 @@ public class project4 {
         boolean continueGame = true;
         while(continueGame){
             clearScreen();
+            // generate, draw, and move player
             catacomb = buildCatacomb(catacombSize, playerLocation, dungeon);
             drawCatacomb(catacomb, hero.getHealth(), numMonsters, hero, dungeon, playerLocation);
             playerLocation = movePlayer(playerLocation, catacombSize, userInput, hero);
 
-            if (hero.getIsDefeated()){ // verify player health is positive while moving through catacombs
+            // verify player health is positive while moving through catacombs
+            if (hero.getIsDefeated()){ 
                 clearScreen();
                 System.out.println("You did not escape the catacombs in time!");
                 continueGame = false;
@@ -86,7 +91,7 @@ public class project4 {
                     clearScreen();
                     System.out.println("Fighting Monster " + monsterNumber);
                     Monster monster = new Monster();
-                    while (!hero.getIsDefeated() && !monster.getIsDefeated()){
+                    while (!hero.getIsDefeated() && !monster.getIsDefeated()){  // if hero and monster have health remaining, continue battle 
                         System.out.printf("%s's Health: %d  |  Monster %s's Health: %d\n", hero.getName(), hero.getHealth(), monsterNumber, monster.getHealth());
                         int heroAttack = hero.dealDamage();
                         System.out.printf("%s attacks and deals %d damage.\n", hero.getName(), heroAttack);
@@ -95,7 +100,7 @@ public class project4 {
                         monster.takeDamage(heroAttack);
                         hero.takeDamage(monsterAttack);
                     }
-                    if (!hero.getIsDefeated()){
+                    if (!hero.getIsDefeated()){  // if monster has no health remaining print victory message
                         System.out.println("You defeated Monster " + monsterNumber + " and have " + hero.getHealth() + " health remaining.");
                         dungeon.updateMonstersDefeated();
 
@@ -103,7 +108,7 @@ public class project4 {
                         int count = 0;
                         for (int[] j : monsterLocations){  // find index of current location in monster location array and store index
                             if (Arrays.equals(playerLocation, j)){
-                                index = count;
+                                index = count; // set monster index to count
                                 //System.out.println("Index: " + index);  // DEBUG print index of monster 
                             }
                             count+=1;
@@ -112,10 +117,12 @@ public class project4 {
                         dungeon.updateDeadMonsters(playerLocation);
                         //System.out.println("Monster Locations: " + Arrays.deepToString(monsterLocations.toArray())); // DEBUG print monster locations
 
+                        // level up hero damage and continue game
+                        hero.setLevelUp();
                         System.out.println("Press any character to continue: ");
                         userInput.nextLine();
                     }
-                    else{
+                    else{  // if hero has no health remaining print defeat message
                         clearScreen();
                         System.out.println("You were defeated!");
                         continueGame = false;
@@ -129,7 +136,7 @@ public class project4 {
             }
         }
 
-        if (!hero.getIsDefeated()){
+        if (!hero.getIsDefeated()){  // if the hero has health remaining when the game ends then print vicotry message
             clearScreen();
             System.out.println("Congratulations, you escaped the catacombs and claimed the treasure!");
         }
@@ -138,14 +145,20 @@ public class project4 {
     }
 
 
+
 // ----- Methods ----- //
 
-
+/**
+ * Determines number of monsters in a room for player to fight
+ * @param playerLocation player location in catacombs
+ * @param dungeon object instance of Catacombs class created
+ * @return number of monsters in the same room as the player
+ */
 public static int monstersToFight(int[] playerLocation, Catacombs dungeon){
     int numMonstersToFight = 0;
     ArrayList<int[]> monsterLocations = new ArrayList<>();
-    monsterLocations = dungeon.getMonsterLocations();
-    for (int[] i : monsterLocations){
+    monsterLocations = dungeon.getMonsterLocations();  // get monsterlocations array
+    for (int[] i : monsterLocations){  // loop through monsterlocations array and check if player location and monster location are equal
         if (Arrays.equals(playerLocation, i)){
             numMonstersToFight+=1;
         }
@@ -153,17 +166,23 @@ public static int monstersToFight(int[] playerLocation, Catacombs dungeon){
     return numMonstersToFight;
 }
 
-
+/**
+ * Checks if monsters are located adjacent to the player (north, east, south, or west of current player location)
+ * @param playerLocation player location in the catacombs
+ * @param dungeon object instance of Catacombs class created
+ * @return total number of monsters adjacent to player location
+ */
 public static int nearbyMosters(int[] playerLocation, Catacombs dungeon){
     int totalMonsters = 0;
     ArrayList<int[]> monsterLocations = new ArrayList<>();
     monsterLocations = dungeon.getMonsterLocations();
+
     // create locations where player can detect monsters and check against monster locations from catacombs
     int[] potentialMonsterLocationN = {playerLocation[0]-1, playerLocation[1]};  
     int[] potentialMonsterLocationS = {playerLocation[0]+1, playerLocation[1]};
     int[] potentialMonsterLocationE = {playerLocation[0], playerLocation[1]+1};
     int[] potentialMonsterLocationW = {playerLocation[0], playerLocation[1]-1};
-    for (int[] i : monsterLocations){
+    for (int[] i : monsterLocations){ // increment counter if a monster is located north, east, south, or west of a player 
         if(Arrays.equals(potentialMonsterLocationN, i)){
             totalMonsters+=1;
         }
@@ -180,10 +199,17 @@ public static int nearbyMosters(int[] playerLocation, Catacombs dungeon){
     return totalMonsters;
 }
 
-
+/**
+ * creates catacombs using unicode characters
+ * @param catacombSize size of the catacomb
+ * @param playerLocation player location in the catacombs
+ * @param dungeon object instance of Catacombs class created
+ * @return array of unicode characters representing catacomb border, exit, player location, and dead monster locations
+ */
 public static char[][] buildCatacomb(int catacombSize, int[] playerLocation, Catacombs dungeon){
 
-    char[][] catacomb = new char[catacombSize+2][catacombSize+2];  // set catacomb size based on user input
+    // initialize catacom size and catacomb, player, and monster characters
+    char[][] catacomb = new char[catacombSize+2][catacombSize+2]; 
     char border = '\u2588';
     char emptyRoom = '\u0020';
     char player = '\u2656';
@@ -236,7 +262,15 @@ public static char[][] buildCatacomb(int catacombSize, int[] playerLocation, Cat
     
 }
 
-
+/**
+ * draw catacomb and player stats on screen
+ * @param catacomb // 2D array to store characters
+ * @param heroHealth // current player heath
+ * @param numMonsters // number of monsters adjacent to player
+ * @param hero // object instance of Hero class created
+ * @param dungeon // object instance of Catacombs class created
+ * @param playerLocation // player location in the catacombs
+ */
 public static void drawCatacomb(char[][] catacomb, int heroHealth, int numMonsters, Hero hero, Catacombs dungeon, int[] playerLocation){
 
     ArrayList<int[]> monsterLocations = new ArrayList<>();
@@ -249,13 +283,22 @@ public static void drawCatacomb(char[][] catacomb, int heroHealth, int numMonste
         }
         System.out.println();
     }
+
+    // print player stats to screen
     numMonsters = nearbyMosters(playerLocation, dungeon);
     System.out.printf("%s's Health: %s and Location: %s\n", hero.getName(), hero.getHealth(), Arrays.toString(playerLocation));
     System.out.printf("You smell %d monsters nearby.\n", numMonsters);
     //System.out.println("Moster Locations: " + Arrays.deepToString(monsterLocations.toArray())); // DEBUG display monster locations
 }
 
-
+/**
+ * Displays available directions player can move based on current location in catacombs and moves player to selected location
+ * @param playerLocation  // player location in the catacombs
+ * @param catacombSize  // catacomb size
+ * @param userInput  // user input direction of 'north', 'east', 'south', or 'west'
+ * @param hero // object instance of Hero class created
+ * @return
+ */
 public static int[] movePlayer(int[] playerLocation, int catacombSize, Scanner userInput, Hero hero){
     // initialize variables
     int[] movePlayer = new int[2];
@@ -380,7 +423,12 @@ public static int[] movePlayer(int[] playerLocation, int catacombSize, Scanner u
     return movePlayer;
 }
 
-
+/**
+ * Moves player 1 space to the left, right, up, or down based on player input
+ * @param direction  // player input direction of 'north', 'east', 'south', or 'west'
+ * @param currentPlayerLocation  // player location in catacombs
+ * @return
+ */
 public static int[] newPlayerLocation(String direction, int[] currentPlayerLocation){
     int[] newPlayerLocation = new int[2];
     switch (direction){
@@ -408,13 +456,18 @@ public static int[] newPlayerLocation(String direction, int[] currentPlayerLocat
     return newPlayerLocation;
 }
 
-
+/**
+ * Clears the screen
+ */
 public static void clearScreen(){
     System.out.print("\033[H\033[2J");
     System.out.flush();
 }
 
-
+/**
+ * Pause game for specificed period of time
+ * @param time time to pause game in milliseconds
+ */
 public static void pauseGame(int time) {
     try {
         Thread.sleep(time);
