@@ -7,6 +7,7 @@ public class Project4 {
     public static void main(String[] args) throws Exception {
 
         // additional feature: implements a character map that displays the dungeon, player location, and defeated monsters to the command line
+        // additional feature: defeated monsters are identified on the map
         // additional feature: for each monster defeated the player's potential max damage inflicted on monsters increased by one (i.e. they player attack levels up)
 
         // initialize variables
@@ -54,10 +55,10 @@ public class Project4 {
         System.out.printf("Rooms where you have defeated a monster will be marked with the %c symbol on the map.\n", '\u2620');
         System.out.printf("For every monster you defeat your potential max damage increases by one.\n");
         System.out.printf("Navigate to the X on the map to claim the treasure and exit the catacombs.\n\n");
-        System.out.printf("Type any character to start.\n");
+        System.out.printf("Type any character to start: ");
         
 
-        // build catacomb and spawn monsters
+        // build catacomb, spawn monsters, and get monster locations
         dungeon.setCatacombs(catacombSize);
         monsterLocations = dungeon.getMonsterLocations();
         numMonsters = dungeon.getNumberOfMonsters();
@@ -83,10 +84,10 @@ public class Project4 {
 
             // check to see if there are monsters to fight at player's current location
             int battle = monstersToFight(playerLocation, dungeon);
-            if (battle > 0){  // if there are monster start battle routine
+            if (battle > 0){  // if there are monsters to fight, start battle routine
                 clearScreen();
                 System.out.println("There are " + battle + " monsters to fight in this room.");
-                System.out.println("Preparter to fight");
+                System.out.println("Prepare to fight");
                 pauseGame(2000);
                 for (int i = 1; i <= battle; i++){  // fight each monster in the room
                     int monsterNumber = dungeon.getMonstersDefeated()+1;
@@ -95,18 +96,18 @@ public class Project4 {
                     Monster monster = new Monster();
                     while (!hero.getIsDefeated() && !monster.getIsDefeated()){  // if hero and monster have health remaining, continue battle 
                         System.out.printf("%s's Health: %d  |  Monster %s's Health: %d\n", hero.getName(), hero.getHealth(), monsterNumber, monster.getHealth());
-                        int heroAttack = hero.dealDamage();
+                        int heroAttack = hero.dealDamage();  // amount of damage hero will deal
                         System.out.printf("%s attacks and deals %d damage.\n", hero.getName(), heroAttack);
-                        int monsterAttack = monster.dealDamage();
+                        int monsterAttack = monster.dealDamage();  // amount of damage moster will deal
                         System.out.printf("Monster %s attacks and deals %d damage.\n", monsterNumber, monsterAttack);
-                        monster.takeDamage(heroAttack);
-                        hero.takeDamage(monsterAttack);
+                        monster.takeDamage(heroAttack);  // monster takes the amount of damage dealt by hero and health updated
+                        hero.takeDamage(monsterAttack);  // hero takes the amount of damage dealt by monster and health updated
                     }
-                    if (!hero.getIsDefeated()){  // if monster has no health remaining print victory message
+                    if (!hero.getIsDefeated()){  // if monster has no health remaining, print victory message
                         System.out.println("You defeated Monster " + monsterNumber + " and have " + hero.getHealth() + " health remaining.");
                         dungeon.updateMonstersDefeated();
 
-                        // remove monster
+                        // remove monster and update catacomb info
                         int count = 0;
                         for (int[] j : monsterLocations){  // find index of current location in monster location array and store index
                             if (Arrays.equals(playerLocation, j)){
@@ -124,7 +125,7 @@ public class Project4 {
                         System.out.println("Press any character to continue: ");
                         userInput.nextLine();
                     }
-                    else{  // if hero has no health remaining print defeat message
+                    else{  // if hero has no health remaining, print defeat message
                         clearScreen();
                         System.out.println("You were defeated!");
                         continueGame = false;
@@ -138,7 +139,7 @@ public class Project4 {
             }
         }
 
-        if (!hero.getIsDefeated()){  // if the hero has health remaining when the game ends then print vicotry message
+        if (!hero.getIsDefeated()){  // if the hero has health remaining when the game ends, print vicotry message
             clearScreen();
             System.out.println("Congratulations, you escaped the catacombs and claimed the treasure!");
         }

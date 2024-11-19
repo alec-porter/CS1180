@@ -28,21 +28,21 @@ Extract the contents of project4.zip.  Run Project4.java located in the src fold
 <li>The Hero starts with 100 health.</li>
 <li>The Hero's current location is indicated by the &#x2656; symbol.</li>
 <li>The Hero can move north (up), east (right), south (down), or west (left) depending on thier current location.  For example, if the Hero is along the top edge of the catacomb then they can only move west, east, and south.</li>
-<li>The game will promp you for a valid direction to move.</li>
+<li>The game will promp you for a valid direction to move.  Type the direction you want the Hero to move.</li>
 <li>There is poison in the catacomb and each move reduces the Hero's health by 2 points.</li>
 <li>The Hero can smell monsters in adjacent rooms and that information is displayed to you.  Adjacent rooms are defined as the rooms directly north, east, south, and west of the Hero.</li>
 <li>There can be more than one monster in a room.</li>
-<li>If the hero enters a room with one or more monsters they will automatically engage the monsters in battle.  All monsters have 25 health.  The Hero can deal up to 10 points of damage and for each monster they defeat their max potential damage increases by 1.  Monsters can deal up to 5 points of damage.</li>
-<li>The status of the battle is displayed to you.  If the Hero survives the battle(s) they can continue their journey through the catacomb.</li>
+<li>If the Hero enters a room with one or more monsters they will automatically engage the monsters in battle.  All monsters have 25 health.  The Hero can deal up to 10 points of damage.  For each monster the Hero defeats, their max potential damage increases by 1.  Monsters can deal up to 5 points of damage.</li>
+<li>The status of the battle and the outcome is displayed to you.  If the Hero survives the encounter they can continue their journey through the catacomb.</li>
 <li>Once monsters are defeated they de-spawn from the room.  Rooms that have been vanquished of any monsters by the Hero are indicated by the &#x2620; symbol on the map.</li>
 <li>If the Hero makes it to the exit they claim the treasure.
 </ul>
-Good luck and enjoy **Catacomb Crawler**.
+Good luck and enjoy <b>Catacomb Crawler</b>.
 
 ## Lessons Learned
 <ul>
 <li> Developing a UML with the classes, attributes, methods, etc. I anticipated needing was useful in getting started but I ended up straying from the initial design as I developed the code and never updated the UML (probably should have).</li>
 <li> Unless I'm mistaken, you can't use the indexOf() method (or other direct method) to find the index of an array inside of another array.  You need to use a for-each loop and the equals() method. I figured there would be a direct method to do this.</li>
-<li> The classes were helpful in developing the code and with some additional planning at the start I think I could have made my code easier to develop an more efficient.</li>
+<li> The classes were helpful in developing the code and with some additional planning at the start I think I could have made my code easier to develop and more efficient.</li>
 <li> Using an arraylist to store arrays is very useful but can be both more complex and simpler to implement/access than using multiple arrays.
 </ul>
