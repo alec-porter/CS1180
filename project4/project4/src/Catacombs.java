@@ -1,7 +1,13 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-
+/**
+ * Class Catacombs
+ * 
+ * Sets the size of the catacombs, spawns monsters, sets monster location in the catacombs, and tracks number and location of defeated monsters.
+ * 
+ * @author Alec Porter
+ */
 public class Catacombs {
     private int catacombSize;
     private int numberOfMonsters;
@@ -33,7 +39,7 @@ public class Catacombs {
     }
 
     /**
-     * Creates a catacomb of NxN size based on user input
+     * Sets the size of the catacombs, determines the number of monsters in catacombs, and spawns monsters at random locations
      * @param inputSize size of catacomb
      */
     public void setCatacombs(int inputSize){

@@ -2,7 +2,11 @@
 //import java.lang.reflect.Array;
 import java.util.*;
 
-
+/**
+ * CS1180 Project 4 - Demonstrate object-oriented skills through appropriate use of classes and methods by implementing a game called Catacomb Crawler.
+ * 
+ * @author Alec Porter
+ */
 public class Project4 {
     public static void main(String[] args) throws Exception {
 
@@ -265,12 +269,12 @@ public static char[][] buildCatacomb(int catacombSize, int[] playerLocation, Cat
 
 /**
  * draw catacomb and player stats on screen
- * @param catacomb // 2D array to store characters
- * @param heroHealth // current player heath
- * @param numMonsters // number of monsters adjacent to player
- * @param hero // object instance of Hero class created
- * @param dungeon // object instance of Catacombs class created
- * @param playerLocation // player location in the catacombs
+ * @param catacomb 2D array to store characters
+ * @param heroHealth current player heath
+ * @param numMonsters number of monsters adjacent to player
+ * @param hero object instance of Hero class created
+ * @param dungeon object instance of Catacombs class created
+ * @param playerLocation player location in the catacombs
  */
 public static void drawCatacomb(char[][] catacomb, int heroHealth, int numMonsters, Hero hero, Catacombs dungeon, int[] playerLocation){
 
@@ -293,11 +297,11 @@ public static void drawCatacomb(char[][] catacomb, int heroHealth, int numMonste
 
 /**
  * Displays available directions player can move based on current location in catacombs and moves player to selected location
- * @param playerLocation  // player location in the catacombs
- * @param catacombSize  // catacomb size
- * @param userInput  // user input direction of 'north', 'east', 'south', or 'west'
- * @param hero // object instance of Hero class created
- * @return
+ * @param playerLocation  player location in the catacombs
+ * @param catacombSize  catacomb size
+ * @param userInput  user input direction of 'north', 'east', 'south', or 'west'
+ * @param hero object instance of Hero class created
+ * @return new grid location of the player
  */
 public static int[] movePlayer(int[] playerLocation, int catacombSize, Scanner userInput, Hero hero){
     // initialize variables
@@ -425,9 +429,9 @@ public static int[] movePlayer(int[] playerLocation, int catacombSize, Scanner u
 
 /**
  * Moves player 1 space to the left, right, up, or down based on player input
- * @param direction  // player input direction of 'north', 'east', 'south', or 'west'
- * @param currentPlayerLocation  // player location in catacombs
- * @return
+ * @param direction  player input direction of 'north', 'east', 'south', or 'west'
+ * @param currentPlayerLocation  player location in catacombs
+ * @return new player locaiton in the catacomb
  */
 public static int[] newPlayerLocation(String direction, int[] currentPlayerLocation){
     int[] newPlayerLocation = new int[2];

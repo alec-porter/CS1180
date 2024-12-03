@@ -1,5 +1,12 @@
 import java.util.Random;
-
+/**
+ * Monster Class
+ * 
+ * Sets monster name, health, and attack damage.
+ * Determins the amount of damage the monster does during hero fights.
+ * 
+ * @author Alec Porter
+ */
 public class Monster {
 
     private final String name;

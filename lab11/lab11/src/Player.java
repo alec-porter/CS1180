@@ -1,5 +1,11 @@
 import java.util.Random;
-
+/**
+ * Player Class
+ * 
+ * Creates players based on user input of player name, health, and max damage taken during battle.
+ * Determines random amount of damage taken when attacked. 
+ * Overwrites toSting() to print a custom message. 
+ */
 public class Player {
     
     String name;

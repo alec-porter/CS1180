@@ -1,5 +1,14 @@
 import java.util.Random;
 
+/**
+ * Hero Class
+ * 
+ * Sets the name, health, attack damage, and status of the user player.
+ * Tracks player health as they navigate through the catacombs and fight monsters.
+ * Detemines the amount of damage the player does during monster fights.
+ * 
+ * @author Alec Porter
+ */
 public class Hero {
 
     private String name;
